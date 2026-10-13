@@ -4,7 +4,6 @@ import jakarta.validation.constraints.NotBlank;
 
 public class ThreadReplyRequest {
 
-    @NotBlank(message = "Author is required")
     private String author;
 
     @NotBlank(message = "Content is required")

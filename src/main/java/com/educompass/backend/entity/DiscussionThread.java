@@ -19,9 +19,13 @@ public class DiscussionThread {
     @Column(nullable = false)
     private String title;
 
-    @NotBlank(message = "Author name is required")
     @Column(nullable = false)
     private String author;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = true)
+    @com.fasterxml.jackson.annotation.JsonIgnore
+    private User creator;
 
     @NotBlank(message = "Category is required")
     @Column(nullable = false)
@@ -36,6 +40,7 @@ public class DiscussionThread {
 
     @OneToMany(mappedBy = "thread", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @OrderBy("createdAt ASC")
+    @JsonManagedReference
     private List<ThreadReply> replies = new ArrayList<>();
 
     @Column(name = "created_at", updatable = false)
@@ -93,6 +98,18 @@ public class DiscussionThread {
         this.author = author;
     }
 
+    public User getCreator() {
+        return creator;
+    }
+
+    public void setCreator(User creator) {
+        this.creator = creator;
+    }
+
+    public Long getCreatorId() {
+        return creator != null ? creator.getId() : null;
+    }
+
     public String getCategory() {
         return category;
     }
@@ -133,4 +150,5 @@ public class DiscussionThread {
     public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
+    
 }
